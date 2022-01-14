@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: svr-saletool
+  dynamic:
+    datasource:
+      default-data-source: master
+      show-selected-source: true
+  resources:
+    static-locations: file:/opt/dev/upload/
+  mvc:
+    static-path-pattern: /upload/**
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    default-statement-timeout: 111
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:/mappers/*.xml
+  type-aliases-package: com.grn.pojo
+
+
+master:
+  spring:
+    datasource:
+      username: sale
+      password: grn123
+      driver-class-name: oracle.jdbc.OracleDriver
+      jdbc-url: jdbc:oracle:thin:@192.168.200.162:1521/orcl?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false
+
+slave:
+  spring:
+    datasource:
+      username: sale
+      password: FHXdYiW04Z5c
+      driver-class-name: oracle.jdbc.OracleDriver
+      jdbc-url: jdbc:oracle:thin:@192.168.99.150:1521/orcl?characterEncoding=utf-8
+
+
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 2 #每隔2秒向服务端发送一次心跳，证明服务存活
+    lease-expiration-duration-in-seconds: 10 #服务端10秒内未收到过1次心跳，则将该服务移除出微服务
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://grn:grn0111@192.168.200.163:18000/eureka/
+      #defaultZone: http://grn:grn0111@master:18000/eureka/,http://grn:grn0111@backup:18000/eureka/
